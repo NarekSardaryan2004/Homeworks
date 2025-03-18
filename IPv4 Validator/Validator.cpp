@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <bitset>
+#include <sstream>
 
 constexpr size_t TOTAL_IPS = 1UL << 20;
 
@@ -15,8 +16,11 @@ std::string intToIp(u_int32_t ip) {
 
 u_int32_t IPToint(const std::string& ip) {
     u_int32_t a, b, c, d;
-    sscanf(ip.c_str(), "%u.%u.%u.%u", &a, &b, &c, &d);
-    
+    char dot;
+    std::istringstream iss(ip);
+    if (!(iss >> a >> dot >> b >> dot >> c >> dot >> d) || dot != '.') {
+        throw std::invalid_argument("Invalid IP format");
+    }
     return (a << 24) | (b << 16) | (c << 8) | d;
 }
 
